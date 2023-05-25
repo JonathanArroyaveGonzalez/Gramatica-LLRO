@@ -36,7 +36,7 @@ class Interfaz:
         self.lblGramatica.place(x=50, y=20)
 
         self.textGramatica = scrolledtext.ScrolledText(
-            self.ventana, wrap=tk.WORD, width=23, height=10, font=("Arial", 15))
+            self.ventana, wrap=tk.WORD, width=23, height=22, font=("Arial", 15))
         self.textGramatica.grid(column=0, row=0, padx=40, pady=60)
         self.textGramatica.focus()
 
@@ -50,8 +50,8 @@ class Interfaz:
         self.lblEstados = Label(self.canvas_principal, fg="white", bg="#3A91A6", width=18, text="Estados",
                             font=("Arial", 17)).place(x=730, y=20)
 
-        self.lstEstados = scrolledtext.ScrolledText(self.ventana, fg="black", bg="white", width=35, height=35, font=(
-            "Arial", 10), relief="solid", highlightbackground="white", highlightthickness=2)
+        self.lstEstados = scrolledtext.ScrolledText(self.ventana, fg="black", bg="white", width=40, height=35, font=(
+            "Arial", 12), relief="solid", highlightbackground="white", highlightthickness=2)
         self.lstEstados.place(x=720, y=60)
 
         self.lblTransiciones = Label(self.canvas_principal, fg="white", bg="#3A91A6", width=18, text="Transiciones",
@@ -64,10 +64,10 @@ class Interfaz:
 
         self.btn_Iniciar = Button(self.ventana, fg="white", bg="green", width=15, text="Iniciar", state="normal", font=("Arial", 10),
                      command=self.iniciarPrograma)
-        self.btn_Iniciar.place(x=40, y=310)
+        self.btn_Iniciar.place(x=40, y=600)
 
         self.btn_Salir = Button(self.canvas_principal, fg="white", bg="red", width=15, text="Terminar", font=("Arial", 10),
-                        command=sys.exit).place(x=185, y=310)
+                        command=sys.exit).place(x=185, y=600)
 
         # Mostrar la gramática leída
     def mostrarGramaticaLeida(self):
