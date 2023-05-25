@@ -21,24 +21,29 @@ tabla = []  # tabla estática
 
 """--------------------------- Diseño interfaz del proyecto -------------------------------------"""
 
-# Se crea la ventana:
+from tkinter import Tk, Canvas
+from PIL import Image, ImageTk
+
+# Crear la ventana
 ventana = Tk()
 
-# Se le da un tamaño:
-ventana.geometry("1350x500")
+# Establecer el tamaño de la ventana
+ventana.geometry("1350x550")
+
+# Cargar la imagen de fondo y redimensionarla
 imagen_fondo = Image.open("fondo.jpg")
-imagen_fondo = imagen_fondo.resize((400, 500), Image.LANCZOS)
-#imagen_fondo = imagen_fondo.resize((400, 500), Image.ANTIALIAS)
-imagen_fondo = ImageTk.PhotoImage(imagen_fondo)
+imagen_fondo = imagen_fondo.resize((1350, 550), Image.LANCZOS)
 
-# Mostrar la imagen de fondo en un Label
-fondo_label = Label(ventana, image=imagen_fondo)
-fondo_label.place(x=0, y=0, relwidth=1, relheight=1)
-# Agregando un titulo a la ventana
-ventana.title("Proyecto 2 Lenguajes")
+# Convertir la imagen a formato compatible con Tkinter
+imagen_fondo_tk = ImageTk.PhotoImage(imagen_fondo)
 
-# En este canvas colocaremos las herramientas que nos permitan manipular el programa
-canvas_principal = Canvas(ventana, width=1350, height=670, bg="#3A91A6")
+# Crear el canvas con la imagen de fondo
+canvas_principal = Canvas(ventana, width=1350, height=550)
+canvas_principal.pack()
+
+# Agregar la imagen de fondo al canvas
+canvas_principal.create_image(0, 0, anchor="nw", image=imagen_fondo_tk)
+#canvas_principal.create_image(ventana, width=1350, image="fondo.jpg")
 canvas_principal.place(x=0, y=0)
 
 """--------------------------------------- Menú -----------------------------------------"""
@@ -54,10 +59,10 @@ textGramatica.focus()
 
 # Muestra información de la gramatica leida
 
-lblGramatica2 = Label(canvas_principal, fg="white", bg="#3A91A6", width=18, text="Gramática Leida",
+lblGramatica2 = Label(canvas_principal, fg="white", bg="#3A91A6", width=18, text="Producciones R",
                       font=("Times New Roman", 17)).place(x=380, y=20)
 
-lstGramaticaLeida = scrolledtext.ScrolledText(ventana, fg="white", bg="#3A91A6", width=35, height=20, font=(
+lstGramaticaLeida = scrolledtext.ScrolledText(ventana, fg="black", bg="white", width=35, height=20, font=(
     "Arial", 10), relief="solid", highlightbackground="white", highlightthickness=2)
 lstGramaticaLeida.place(x=380, y=60)
 
@@ -65,7 +70,7 @@ lstGramaticaLeida.place(x=380, y=60)
 lblEstados = Label(canvas_principal, fg="white", bg="#3A91A6", width=18, text="Estados",
                    font=("Times New Roman", 17)).place(x=1020, y=20)
 
-lstEstados = scrolledtext.ScrolledText(ventana, fg="white", bg="#3A91A6", width=35, height=20, font=(
+lstEstados = scrolledtext.ScrolledText(ventana, fg="black", bg="white", width=35, height=20, font=(
     "Arial", 10), relief="solid", highlightbackground="white", highlightthickness=2)
 lstEstados.place(x=1020, y=60)
 
@@ -73,7 +78,7 @@ lstEstados.place(x=1020, y=60)
 lblGramatica2 = Label(canvas_principal, fg="white", bg="#3A91A6", width=18, text="Transiciones",
                       font=("Times New Roman", 17)).place(x=700, y=20)
 
-lstTransiciones = scrolledtext.ScrolledText(ventana, fg="white", bg="#3A91A6", width=35, height=20, font=(
+lstTransiciones = scrolledtext.ScrolledText(ventana, fg="black", bg="white", width=35, height=20, font=(
     "Arial", 10), relief="solid", highlightbackground="white", highlightthickness=2)
 lstTransiciones.place(x=700, y=60)
 
@@ -235,6 +240,18 @@ def mostrarEstados():
         lstEstados.insert(END, "\n\n Estado-I{0}: {1}".format(i, estados[i]))
     lstEstados.configure(state='disabled')
 
+def mostrarEstadosConPunto():
+    lstGramaticaLeida.delete(1.0, END)
+    for i, estado in enumerate(estados):
+        producciones = estado
+        producciones_con_punto = [p for p in producciones if p.endswith(".")]
+        if producciones_con_punto:
+            lstGramaticaLeida.insert(END, "\n\nEstado-I{0}: {1}".format(i, estado))
+            lstGramaticaLeida.insert(END, "\nProducciones R:")
+            for p in producciones_con_punto:
+                lstGramaticaLeida.insert(END, "\n- {0}".format(p))
+    lstGramaticaLeida.configure(state='disabled')
+
 
 #  mostrar transiciones
 def mostrarTransiciones():
@@ -280,12 +297,14 @@ def iniciarPrograma():
     else:
         btn_Iniciar["state"] = "disabled"
         leerGramatica()
-        mostrarGramaticaLeida()
+        #mostrarGramaticaLeida()
         dividirTerminalesYNoTerminales()
         agregarPunto()
         obtenerEstados()
         mostrarEstados()
         mostrarTransiciones()
+        esLR0()
+        mostrarEstadosConPunto()
 
 
 '''---------------------------------------- Botonera -----------------------------------------'''
